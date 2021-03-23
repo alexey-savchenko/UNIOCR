@@ -5,11 +5,15 @@ import CoreImage
 import Moya
 
 public class OCRService {
-  let token: String
-  let provider = MoyaProvider<Backend>()
 
-  public init(token: String) {
-    self.token = token
+  public typealias ExternalOCRService = (UIImage, (Result<String, Error>) -> Void) -> Void
+  
+  let externalOCR: ExternalOCRService
+  
+  public init(
+    externalOCR: @escaping ExternalOCRService
+  ) {
+    self.externalOCR = externalOCR
   }
 
   public func process(
@@ -74,7 +78,7 @@ public class OCRService {
     let filteredImage = ctx.createCGImage(res, from: res.extent).flatMap(UIImage.init)!
 
     switch mode {
-    case .server:
+    case .external:
       let rawResults = self.processRawResults(request: request)
       let requestDataArray = rawResults.compactMap { rawResult -> OCRRequestData? in
         autoreleasepool {
@@ -94,43 +98,38 @@ public class OCRService {
       var drawableResults = [DrawableRecognizedTextResult]()
 
       let dispatchGroup = DispatchGroup()
-
+       
       requestDataArray.forEach { value in
         dispatchGroup.enter()
-        provider.request(.ocr(image: value.image, token: self.token)) { result in
-
+        externalOCR(value.image) { result in
           switch result {
-          case .success(let response):
-            if let text = (try? JSONDecoder().decode(OCRServerResponse.self, from: response.data))?.text {
-              let s = try! NSAttributedString(
-                data: Data(text.utf8),
-                options: [
-                  .documentType: NSAttributedString.DocumentType.html,
-                  .characterEncoding: String.Encoding.utf8.rawValue
-                ],
-                documentAttributes: nil
-              )
-              .string
-              .trimmingCharacters(in: .whitespacesAndNewlines)
-              .replacingOccurrences(of: "\n", with: " ")
-
-              if s.lowercased().contains("техника") {
-                print("")
-              }
-
-              drawableResults.append(
-                DrawableRecognizedTextResult(
-                  string: s,
-                  rect: value.intermediateResult.rect,
-                  fontSize: value.intermediateResult.fontSize,
-                  rawQuad: value.intermediateResult.rawQuad
-                )
-              )
-            }
+          
           case .failure(let error):
             print(error)
+          case .success(let string):
+            
+            let s = try! NSAttributedString(
+              data: Data(string.utf8),
+              options: [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+              ],
+              documentAttributes: nil
+            )
+            .string
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\n", with: " ")
+            
+            drawableResults.append(
+              DrawableRecognizedTextResult(
+                string: s,
+                rect: value.intermediateResult.rect,
+                fontSize: value.intermediateResult.fontSize,
+                rawQuad: value.intermediateResult.rawQuad
+              )
+            )
           }
-
+          
           dispatchGroup.leave()
         }
       }

@@ -20,12 +20,12 @@ public struct OCRResult {
 
 public enum Mode: Int {
   case vision
-  case server
+  case external
 
   var name: String {
     switch self {
-    case .server:
-      return "Server"
+    case .external:
+      return "External"
     case .vision:
       return "Vision"
     }
@@ -115,8 +115,4 @@ struct DrawableRecognizedTextResult {
 struct OCRRequestData {
   let image: UIImage
   let intermediateResult: DrawableRecognizedTextResult
-}
-
-struct OCRServerResponse: Codable {
-  let text: String
 }
