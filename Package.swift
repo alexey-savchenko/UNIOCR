@@ -15,20 +15,11 @@ let package = Package(
       targets: ["UNIOCR"]
     ),
   ],
-  dependencies: [
-    .package(
-      url: "https://github.com/alexey-savchenko/UNILib.git",
-      Package.Dependency.Requirement.branch("main")
-    ),
-    .package(
-      url: "https://github.com/Moya/Moya.git",
-      .upToNextMajor(from: "14.0.0")
-    )
-  ],
+  dependencies: [],
   targets: [
     .target(
       name: "UNIOCR",
-      dependencies: ["Moya", "UNILib"]
+      dependencies: []
     )
   ]
 )
