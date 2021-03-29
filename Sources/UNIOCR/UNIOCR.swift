@@ -2,11 +2,10 @@
 import UIKit
 import Vision
 import CoreImage
-import Moya
 
 public class OCRService {
 
-  public typealias ExternalOCRService = (UIImage, (Result<String, Error>) -> Void) -> Void
+  public typealias ExternalOCRService = (UIImage, @escaping (Result<String, Error>) -> Void) -> Void
   
   let externalOCR: ExternalOCRService
   
