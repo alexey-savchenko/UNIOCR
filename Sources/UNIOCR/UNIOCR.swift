@@ -165,6 +165,9 @@ public class OCRService {
     return render.pdfData { ctx in
       ctx.beginPage()
       backgroundImage.draw(in: pageRect)
+      if debug {
+        print("Text boxes recognized: \(drawableResults.count)")
+      }
       drawableResults.forEach { result in
 
         let paragraphStyle = NSMutableParagraphStyle()
