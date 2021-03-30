@@ -40,6 +40,7 @@ public class OCRService {
         request: request,
         inputImage: image,
         mode: mode,
+        debug: debug,
         completion: completion
       )
     }
@@ -63,7 +64,7 @@ public class OCRService {
     request: VNRequest,
     inputImage: UIImage,
     mode: Mode,
-    debug: Bool = false,
+    debug: Bool,
     completion: @escaping (Result<OCRResult, OCRError>) -> Void
   ) {
     let overlay = CIImage(color: CIColor(color: UIColor.white.withAlphaComponent(0.5)))
