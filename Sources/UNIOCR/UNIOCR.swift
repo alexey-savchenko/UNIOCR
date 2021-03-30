@@ -158,7 +158,7 @@ public class OCRService {
   private func makePDFData(
     drawableResults: [DrawableRecognizedTextResult],
     backgroundImage: UIImage,
-    debug: Bool = false
+    debug: Bool
   ) -> Data {
     let pageRect = CGRect(origin: .zero, size: backgroundImage.size)
     let render = UIGraphicsPDFRenderer(bounds: pageRect, format: UIGraphicsPDFRendererFormat())
