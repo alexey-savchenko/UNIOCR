@@ -18,7 +18,7 @@ public class OCRService {
   public func process(
     _ image: UIImage,
     mode: Mode,
-    debug: Bool = false,
+    debug: Bool,
     completion: @escaping (Result<OCRResult, OCRError>) -> Void
   ) {
     guard
