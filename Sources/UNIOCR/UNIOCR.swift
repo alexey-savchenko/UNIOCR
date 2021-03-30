@@ -137,7 +137,7 @@ public class OCRService {
         let transcribedString = drawableResults.reduce(into: "") { result, recogResult in
           result.append(recogResult.string.appending("\n"))
         }
-        let data = self.makePDFData(drawableResults: drawableResults, backgroundImage: filteredImage)
+        let data = self.makePDFData(drawableResults: drawableResults, backgroundImage: filteredImage, debug: debug)
 
         completion(.success(.init(pdfData: data, content: transcribedString)))
       }
@@ -150,7 +150,7 @@ public class OCRService {
       }
 
       let drawableResults = rawResults.map { r in self.processResult(r, imageSize: filteredImage.size) }
-      let data = self.makePDFData(drawableResults: drawableResults, backgroundImage: filteredImage)
+      let data = self.makePDFData(drawableResults: drawableResults, backgroundImage: filteredImage, debug: debug)
       completion(.success(.init(pdfData: data, content: transcribedString)))
     }
   }
