@@ -98,6 +98,15 @@ public struct Quadrilateral {
     path.addLine(to: bottomLeft)
     return path
   }
+  
+  func applying(_ transform: CGAffineTransform) -> Quadrilateral {
+    return Quadrilateral(
+      bottomLeft: bottomLeft.applying(transform),
+      bottomRight: bottomRight.applying(transform),
+      topLeft: topLeft.applying(transform),
+      topRight: topRight.applying(transform)
+    )
+  }
 }
 
 struct RecognizedTextResult {
