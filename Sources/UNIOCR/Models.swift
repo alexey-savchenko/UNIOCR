@@ -99,7 +99,7 @@ public struct Quadrilateral {
     return path
   }
   
-  func applying(_ transform: CGAffineTransform) -> Quadrilateral {
+  public func applying(_ transform: CGAffineTransform) -> Quadrilateral {
     return Quadrilateral(
       bottomLeft: bottomLeft.applying(transform),
       bottomRight: bottomRight.applying(transform),
