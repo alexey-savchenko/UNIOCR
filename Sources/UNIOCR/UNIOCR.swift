@@ -67,10 +67,10 @@ public class OCRService {
     debug: Bool,
     completion: @escaping (Result<OCRResult, OCRError>) -> Void
   ) {
-    let overlay = CIImage(color: CIColor(color: UIColor.white.withAlphaComponent(0.5)))
+    let overlay = CIImage(color: CIColor(color: UIColor.white.withAlphaComponent(0.3)))
       .cropped(to: CGRect(origin: .zero, size: inputImage.size))
     let ciImage = CIImage(image: inputImage)!
-      .applyingGaussianBlur(sigma: 10)
+//      .applyingGaussianBlur(sigma: 10)
       .clampedToExtent()
       .cropped(to: CGRect(origin: .zero, size: inputImage.size))
     let res = overlay.composited(over: ciImage)

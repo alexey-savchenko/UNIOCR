@@ -51,11 +51,18 @@ public struct Quadrilateral {
   }
 
   public func toCartesian() -> Quadrilateral {
+    
+    let transform: (CGPoint) -> CGPoint = { point in
+      return point
+        .applying(.init(scaleX: 1, y: -1))
+        .applying(.init(translationX: 0, y: 1))
+    }
+    
     return .init(
-      bottomLeft: bottomLeft.applying(.init(scaleX: 1, y: -1)).applying(.init(translationX: 0, y: 1)),
-      bottomRight: bottomRight.applying(.init(scaleX: 1, y: -1)).applying(.init(translationX: 0, y: 1)),
-      topLeft: topLeft.applying(.init(scaleX: 1, y: -1)).applying(.init(translationX: 0, y: 1)),
-      topRight: topRight.applying(.init(scaleX: 1, y: -1)).applying(.init(translationX: 0, y: 1))
+      bottomLeft: transform(bottomLeft),
+      bottomRight: transform(bottomRight),
+      topLeft: transform(topLeft),
+      topRight: transform(topRight)
     )
   }
 
